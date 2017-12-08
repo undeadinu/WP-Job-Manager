@@ -73,6 +73,9 @@ class WP_Job_Manager {
 		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-cache-helper.php' );
 		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/helper/class-wp-job-manager-helper.php' );
 
+		// Load blocks
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/blocks/jobs/jobs.php' );
+
 		add_action( 'rest_api_init', array( $this, 'rest_api' ) );
 
 		if ( is_admin() ) {

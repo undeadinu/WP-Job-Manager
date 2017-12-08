@@ -1,5 +1,7 @@
 /nbproject/private/
 /node_modules/
+/includes/blocks/**/block.js
+/includes/blocks/**/block.js.map
 package-lock.json
 project.xml
 project.properties

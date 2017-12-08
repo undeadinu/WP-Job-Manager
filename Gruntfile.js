@@ -9,6 +9,7 @@ module.exports = function( grunt ){
 			fonts: 'assets/font',
 			images: 'assets/images',
 			js: 'assets/js',
+			blocks: 'includes/blocks',
 			build: 'tmp/build',
 			svn: 'tmp/release-svn'
 		},
@@ -16,6 +17,25 @@ module.exports = function( grunt ){
 		shell: {
 			buildMixtape: {
 				command: 'node_modules/.bin/mixtape build'
+			}
+		},
+
+		babel: {
+			options: {
+				sourceMap: true,
+				presets: ['env'],
+				plugins: [
+					[ "transform-react-jsx", {
+						"pragma": "wp.element.createElement"
+					} ]
+				]
+			},
+			dist: {
+				files: [{
+					expand: true,
+					src: ['<%= dirs.blocks %>/**/block.jsx'],
+					ext:'.js'
+				}]
 			}
 		},
 
@@ -258,6 +278,7 @@ module.exports = function( grunt ){
 	grunt.loadNpmTasks( 'grunt-wp-i18n' );
 	grunt.loadNpmTasks( 'grunt-wp-readme-to-markdown');
 	grunt.loadNpmTasks( 'grunt-zip' );
+	grunt.loadNpmTasks( 'grunt-babel' );
 
 	grunt.registerTask( 'check-mixtape', 'Checking for WPJM\'s REST library (Mixtape) and building if necessary', function() {
 		if ( ! grunt.file.exists( 'lib/wpjm_rest/class-wp-job-manager-rest-bootstrap.php' ) ) {
@@ -273,7 +294,7 @@ module.exports = function( grunt ){
 
 	grunt.registerTask( 'build-mixtape', [ 'shell:buildMixtape' ] );
 
-	grunt.registerTask( 'build', [ 'gitinfo', 'clean', 'check-mixtape', 'check-mixtape-fatal', 'test', 'copy' ] );
+	grunt.registerTask( 'build', [ 'gitinfo', 'clean', 'check-mixtape', 'check-mixtape-fatal', 'babel', 'test', 'copy' ] );
 
 	grunt.registerTask( 'deploy', [ 'checkbranch:master', 'checkrepo', 'build', 'wp_deploy' ] );
 	grunt.registerTask( 'deploy-unsafe', [ 'build', 'wp_deploy' ] );
